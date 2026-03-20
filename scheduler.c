@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "scheduler.h"
+#include "interrupt.h"
 #include "pcb.h"
 
 
@@ -89,9 +90,35 @@ void run_scheduler(Scheduler *s, PCB **processes, int size, int quantum) {
     int running_scheduler = 1;
 
     while (running_scheduler) {
-         for (int i = 0; i < size; i++) {
-            if (processes[i]->state == WAITING) {
-                processes[i]->io_time_remaining--;
+
+        //Mock up w/ no review yet.
+        //PICKUP: Make sure that once this sequence runs
+        //        to analyze how it will afffect the rest
+        //        of the scheduler. I think its good but
+        //        I will see tmr
+
+        Interrupt *intr = check_interrupts(s->tick);
+        if (intr->type == INT_TIMER) {
+            preempt(s->running, s->tick);
+            enqueue(s, dequeue(s));
+        } else if (intr->type == INT_IO_COMPLETE) {
+            for (int i = 0; i < size; i++) {
+                if (processes[i]->state == WAITING && intr->target_pid == processes[i]->pid ) {
+                    io_complete(processes[i], s->tick);
+                    enqueue(s, processes[i]);
+                }
+            }
+        } else if (intr->type == INT_KILL) {
+            for (int i = 0; i < size; i++) {
+                if (intr->target_pid = processes[i]->pid && processes[i]->state != TERMINATED) {
+                    terminate_process(processes[i], s->tick);
+                }
+            }
+        }
+
+        for (int i = 0; i < size; i++) {                           //entire for loop is to run through
+            if (processes[i]->state == WAITING) {                   //all Waiting processes, otherwise
+                processes[i]->io_time_remaining--;                  //just just enqueue incomoing processes
                 if (processes[i]->io_time_remaining == 0) {
                     io_complete(processes[i], s->tick);
                     enqueue(s, processes[i]);
@@ -102,9 +129,9 @@ void run_scheduler(Scheduler *s, PCB **processes, int size, int quantum) {
             }
         }
 
-        if (s->running != NULL) {
-            s->running->remaining_burst--;
-            s->running->program_counter++;
+        if (s->running != NULL) {                                   //if schedule starts with a running
+            s->running->remaining_burst--;                          //process or one from last while
+            s->running->program_counter++;                          //itteration
             s->running->cpu_time_used++;
             s->ticks_on_cpu++;
             if (s->running->remaining_burst <= 0) {
@@ -127,21 +154,24 @@ void run_scheduler(Scheduler *s, PCB **processes, int size, int quantum) {
                 s->ticks_on_cpu = 0;
             }
 
-        } else if (s->running == NULL && is_empty(s) == 0) {
+        } else if (s->running == NULL && is_empty(s) == 0) {        //if nothing is running but queue is not empty
             s->running = dequeue(s);
             dispatch(s->running, s->tick);
 
-        } else if (s->running == NULL && is_empty(s) == 1) {
-            int complete_flag = 1;
-            for (int i = 0; i < size; i++) {
-                if (processes[i]->state != TERMINATED) {
+        } else if (s->running == NULL && is_empty(s) == 1) {        //if queue is empty and running is empty
+            int complete_flag = 1;                                  //then first check if there are any waiting
+            for (int i = 0; i < size; i++) {                        //via if its not terminated. otherwise end
+                if (processes[i]->state != TERMINATED) {            //schedule run.
                     complete_flag = 0;
                     break;
                 }
             }
             if (complete_flag) running_scheduler = 0;
         }
-
         s->tick++;
+    }
+
+    for (int i = 0; i < size; i++) {
+        printf("PID: %i | State: %s\n", processes[i]->pid, state_to_string(processes[i]->state));
     }
 }

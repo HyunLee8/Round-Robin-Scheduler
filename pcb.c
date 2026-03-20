@@ -3,7 +3,7 @@
 #include "pcb.h"
 
 PCB *create_process(int pid, int arrival_time, int cpu_burst, int io_burst, int priority) {
-     PCB *pcb = malloc(sizeof(PCB));
+    PCB *pcb = malloc(sizeof(PCB));
 
     pcb->pid = pid;
     pcb->state = NEW;

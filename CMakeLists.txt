@@ -1,23 +1,29 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 3.16)
 project(scheduler C)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -g")
 
 find_package(Threads REQUIRED)
 
 add_executable(scheduler
         main.c
         pcb.c
-        pcb.h
         scheduler.c
-        scheduler.h
+        interrupt.c
 )
 
-if (CMAKE_BUILD_TYPE MATCHES Debug)
-    add_compile_options(-fsanitize=address -g)
-    add_link_options(-fsanitize=address)
-endif()
+target_compile_options(scheduler PRIVATE -Wall -Wextra -g)
+target_link_libraries(scheduler PRIVATE Threads::Threads)
 
-target_link_libraries(scheduler Threads::Threads)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_options(scheduler PRIVATE
+            -fsanitize=address
+            -fsanitize=undefined
+            -fno-omit-frame-pointer
+    )
+    target_link_options(scheduler PRIVATE
+            -fsanitize=address
+            -fsanitize=undefined
+    )
+endif()
 
