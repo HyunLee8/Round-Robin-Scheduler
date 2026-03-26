@@ -10,6 +10,8 @@ add_executable(scheduler
         pcb.c
         scheduler.c
         interrupt.c
+        threads.c
+        threads.h
 )
 
 target_compile_options(scheduler PRIVATE -Wall -Wextra -g)
