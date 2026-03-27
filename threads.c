@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <pthread.h>
 #include "threads.h"
-
 #include <stdlib.h>
 
 static int shared_counter = 0;

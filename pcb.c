@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "pcb.h"
+#include "threads.h"
 
 PCB *create_process(int pid, int arrival_time, int cpu_burst, int io_burst, int priority) {
     PCB *pcb = malloc(sizeof(PCB));
+    pcb->threads_size = 0;
 
     pcb->pid = pid;
     pcb->state = NEW;
@@ -38,3 +40,25 @@ void print_pcb(PCB *pcb) {
     printf("finish_time: %i\n", pcb->finish_time);
 }
 
+void add_thread(PCB *pcb, Thread *thread) {
+    if (pcb->threads_size < MAX_THREADS) {
+        threads[pcb->threads_size] = thread;
+        pcb->threads_size++;
+    } else {
+        printf("Too many threads\n");
+    }
+}
+
+void remove_thread(PCB *pcb) {
+    if (pcb->threads_size > 0) {
+        pcb->threads_size--;
+    } else {
+        printf("No more threads\n");
+    }
+}
+
+/*
+void destroy_thread(Thread *thread) {
+
+}
+*/

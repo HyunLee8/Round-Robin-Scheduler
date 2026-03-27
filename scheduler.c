@@ -3,7 +3,9 @@
 #include <string.h>
 #include "scheduler.h"
 #include "interrupt.h"
+#include "threads.h"
 #include "pcb.h"
+#include "process_threads.h"
 
 
 /*=== Initialize scheduler ===*/
@@ -161,8 +163,9 @@ void run_scheduler(Scheduler *s, PCB **processes, const int size, const int quan
 
         } else if (s->running == NULL && is_empty(s) == 0) {        //if nothing is running but queue is not empty
             s->running = dequeue(s);
-            dispatch(s->running, s->tick);
-
+            dispatch(s->running, s->tick);                          //RUN ALL THREADS ON THE DISPATCH
+            load_process_threads(s->running);
+            run_multithreaded_processor(s->running->threads_size);
         } else if (s->running == NULL && is_empty(s) == 1) {        //if queue is empty and running is empty
             int complete_flag = 1;                                  //then first check if there are any waiting
             for (int i = 0; i < size; i++) {                        //via if its not terminated. otherwise end

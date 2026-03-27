@@ -12,6 +12,8 @@ add_executable(scheduler
         interrupt.c
         threads.c
         threads.h
+        process_threads.c
+        process_threads.h
 )
 
 target_compile_options(scheduler PRIVATE -Wall -Wextra -g)
