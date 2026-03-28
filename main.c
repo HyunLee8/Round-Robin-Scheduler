@@ -7,7 +7,7 @@
 #include "threads.h"
 
 int main(void) {
-    /*
+    // Initialize processes
     PCB *pcb1 = create_process(0, 0,  10, 3, 1);
     PCB *pcb2 = create_process(1, 1,  6,  0, 2);
     PCB *pcb3 = create_process(2, 2,  8,  5, 3);
@@ -20,11 +20,20 @@ int main(void) {
     processes[2] = pcb3;
     processes[3] = pcb4;
 
+    // Each process will have 3 threads (just for testing)
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 3; j++) {
+            add_thread(processes[i], create_thread(j, i, 3));
+        }
+    }
+
+    // Create interrupts
     Interrupt *intr1 = create_interrupt(INT_KILL, 0, 0);
     Interrupt *intr3 = create_interrupt(INT_KILL, 2, 2);
 
     register_interrupt(intr1);
     register_interrupt(intr3);
+
 
     Scheduler *s = createScheduler();
     run_scheduler(s, processes, 4, 4);
@@ -39,7 +48,11 @@ int main(void) {
 
     printf("Finished");
 
-    */
+
+/*
+
+    **For thread testing
+
     Thread *thread0 = create_thread(0, 0, 3);
     Thread *thread1 = create_thread(1, 0, 3);
     Thread *thread2 = create_thread(2, 0, 3);
@@ -51,4 +64,5 @@ int main(void) {
     run_race_condition_demo(3);
 
     return 0;
+*/
 }

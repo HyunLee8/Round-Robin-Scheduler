@@ -7,3 +7,8 @@ void load_process_threads(PCB *pcb) {
         threads_size++;
     }
 }
+
+//destroy the current threads
+void unload_process_threads() {
+    threads_size = 0;
+}

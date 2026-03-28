@@ -19,11 +19,11 @@ Thread *create_thread(int tid, int parent_pid, int work_unit) {
 
 void *thread_worker(void *arg) {
     int total = 0;
-    for (int i = 0; i < ((Thread *)arg)->work_unit; ++i) {
+    for (int i = 0; i < ((Thread *)arg)->work_unit; i++) {
         total += ((Thread *)arg)->tid;
     }
     ((Thread *)arg)->result = total;
-    printf("[Thread %i of PID %i] done, result = %li", ((Thread *)arg)->tid, ((Thread *)arg)->parent_pid, ((Thread *)arg)->result);
+    printf("[Thread %i of PID %i] done, result = %li\n", ((Thread *)arg)->tid, ((Thread *)arg)->parent_pid, ((Thread *)arg)->result);
 
     return NULL;
 }
@@ -40,11 +40,7 @@ void *demo_worker(void *arg) {
 void run_multithreaded_processor(int num_threads) {
     pthread_t pthreads[num_threads];
     for (int i = 0; i < num_threads; i++) {
-        int ret = pthread_create(&pthreads[i], NULL, thread_worker, threads[i]);
-        if (ret != 0) {
-            printf("Error creating pthread %d\n", ret);
-            exit(1);
-        }
+        pthread_create(&pthreads[i], NULL, thread_worker, threads[i]);
     }
     for (int i = 0; i < num_threads; i++) {
         pthread_join(pthreads[i], NULL);
@@ -55,7 +51,7 @@ void run_multithreaded_processor(int num_threads) {
         total += threads[i]->result;
     }
 
-    printf("Total result: %i", total);
+    printf("Total result: %i\n", total);
 }
 
 void run_race_condition_demo (int num_threads) {

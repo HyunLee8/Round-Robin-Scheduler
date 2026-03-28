@@ -29,7 +29,7 @@ Scheduler *createScheduler() {
 
 void enqueue(Scheduler *s, PCB *pcb) {
     if (s->size == s->capacity) {
-        fprintf(stderr, "Error: Queue is full");
+        fprintf(stderr, "Error: Queue is full\n");
     } else {
         s->queue[s->tail] = pcb;
         s->tail = (s->tail + 1) % s->capacity;
@@ -141,6 +141,7 @@ void run_scheduler(Scheduler *s, PCB **processes, const int size, const int quan
             s->running->program_counter++;                          //itteration
             s->running->cpu_time_used++;
             s->ticks_on_cpu++;
+            unload_process_threads();                               //unload all current threads
             if (s->running->remaining_burst <= 0) {
                 if (s->running->io_burst_length > 0) {
                     s->running->io_time_remaining = s->running->io_burst_length;
