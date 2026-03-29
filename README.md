@@ -1,4 +1,4 @@
-# ProcessThreadSim
+# RoundRobin Scheduler
 
 This is a simple high level simulation of a round robin scheduler used in all OS's in order to handle several requests at the same time taking care of PCBs, interruptions, and thread workers.
 
