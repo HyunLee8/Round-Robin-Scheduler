@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "scheduler.h"
-#include "interrupt.h"
-#include "threads.h"
-#include "pcb.h"
-#include "process_threads.h"
+#include "../interrupt/interrupt.h"
+#include "../process/threads.h"
+#include "../process/pcb.h"
+#include "../process/process_threads.h"
 
 
 /*=== Initialize scheduler ===*/

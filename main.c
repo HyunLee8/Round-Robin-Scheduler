@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "pcb.h"
-#include "scheduler.h"
-#include "interrupt.h"
-#include "threads.h"
+#include "process/pcb.h"
+#include "scheduler/scheduler.h"
+#include "interrupt/interrupt.h"
+#include "process/threads.h"
 
 int main(void) {
     // Initialize processes

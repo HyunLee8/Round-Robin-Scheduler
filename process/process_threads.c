@@ -1,4 +1,4 @@
-#include "threads.h"
+#include "../process/threads.h"
 #include "pcb.h"
 
 void load_process_threads(PCB *pcb) {

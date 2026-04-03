@@ -1,4 +1,10 @@
-# RoundRobin Scheduler
+Originally I made this repo in order to better understand the current chptr but after enjoying making the internal structure of MLFQ scheudler I hope to expand this into a long term OS sim project.
+
+## MLFQ
+
+This is basically a wrapper around the RR but i haven't implemented yet.
+
+## Internals (RR Scheduler)
 
 This is a simple high level simulation of a round robin scheduler used in all OS's in order to handle several requests at the same time taking care of PCBs, interruptions, and thread workers.
 

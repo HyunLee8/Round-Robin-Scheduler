@@ -7,13 +7,13 @@ find_package(Threads REQUIRED)
 
 add_executable(scheduler
         main.c
-        pcb.c
-        scheduler.c
-        interrupt.c
-        threads.c
-        threads.h
-        process_threads.c
-        process_threads.h
+        process/pcb.c
+        scheduler/scheduler.c
+        interrupt/interrupt.c
+        process/threads.c
+        process/threads.h
+        process/process_threads.c
+        process/process_threads.h
 )
 
 target_compile_options(scheduler PRIVATE -Wall -Wextra -g)

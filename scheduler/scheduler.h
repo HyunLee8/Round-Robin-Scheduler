@@ -1,6 +1,6 @@
 #ifndef SCHEDULER_SCHEDULER_H
 #define SCHEDULER_SCHEDULER_H
-#include "pcb.h"
+#include "../process/pcb.h"
 #define MAX_PCBs 256
 
 typedef struct {
